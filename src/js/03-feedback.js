@@ -6,12 +6,10 @@ const inputMessage = document.querySelector('[name="message"]');
 
 const STORAGE_KEY = 'feedback-form-state';
 
-const feedbackSet = {
-  email: '',
-  message: '',
-};
+let feedback = {};
 
 openPage();
+console.log(feedback);
 form.addEventListener('input', throttle(saveLocalStore, 500));
 form.addEventListener('submit', submitForm);
 
@@ -21,17 +19,17 @@ function openPage() {
     return;
   }
   try {
-    const feedbackGet = JSON.parse(localGet);
-    inputEmail.value = feedbackGet.email || '';
-    inputMessage.value = feedbackGet.inputMessage || '';
+    feedback = JSON.parse(localGet);
+    inputEmail.value = feedback.email || '';
+    inputMessage.value = feedback.message || '';
   } catch {
     console.error('LocalStorage is brocken');
   }
 }
 
 function saveLocalStore(e) {
-  feedbackSet[e.target.name] = e.target.value.trim();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(feedbackSet));
+  feedback[e.target.name] = e.target.value.trim();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(feedback));
 }
 
 function submitForm(e) {
@@ -41,7 +39,7 @@ function submitForm(e) {
     return;
   }
 
-  console.log(feedbackSet);
+  console.log(feedback);
   localStorage.removeItem(STORAGE_KEY);
   inputEmail.value = '';
   inputMessage.value = '';
