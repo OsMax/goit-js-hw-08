@@ -11,35 +11,38 @@ const feedbackSet = {
   message: '',
 };
 
-form.addEventListener(
-  'input',
-  throttle(e => {
-    if (e.target.nodeName === 'INPUT') {
-      feedbackSet.email = e.target.value.trim();
-    } else {
-      feedbackSet.message = e.target.value;
-    }
-    if (feedbackSet.email.trim() !== '') {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(feedbackSet));
-    }
-  }, 500)
-);
+openPage();
+form.addEventListener('input', throttle(saveLocalStore, 500));
+form.addEventListener('submit', submitForm);
 
-const localGet = localStorage.getItem(STORAGE_KEY);
-if (localGet) {
+function openPage() {
+  const localGet = localStorage.getItem(STORAGE_KEY);
+  if (!localGet) {
+    return;
+  }
   try {
     const feedbackGet = JSON.parse(localGet);
-    inputEmail.value = feedbackGet.email;
-    inputMessage.value = feedbackGet.inputMessage;
+    inputEmail.value = feedbackGet.email || '';
+    inputMessage.value = feedbackGet.inputMessage || '';
   } catch {
     console.error('LocalStorage is brocken');
   }
 }
 
-form.addEventListener('submit', e => {
+function saveLocalStore(e) {
+  feedbackSet[e.target.name] = e.target.value.trim();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(feedbackSet));
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  if (!inputEmail.value || !inputMessage.value) {
+    window.alert('Some data is empty');
+    return;
+  }
+
   console.log(feedbackSet);
   localStorage.removeItem(STORAGE_KEY);
   inputEmail.value = '';
   inputMessage.value = '';
-  e.preventDefault();
-});
+}

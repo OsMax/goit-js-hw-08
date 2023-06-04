@@ -19,19 +19,8 @@ const newItems = galleryItems.map(e => {
 });
 place.insertAdjacentHTML('beforeend', newItems.join(''));
 
-place.addEventListener('click', e => {
-  if (e.target.nodeName !== 'IMG') {
-    return;
-  }
-  let gallery = new SimpleLightbox('.gallery a', {
-    caption: true,
-    captionsData: 'alt',
-    captionDelay: 250,
-  });
-
-  // Без цієї частини відбувається незрозуміле
-  // накопичення бекдропів при закритті і відкритті нових модалок...
-  gallery.on('closed.simplelightbox', function () {
-    gallery.close();
-  });
+new SimpleLightbox('.gallery a', {
+  caption: true,
+  captionsData: 'alt',
+  captionDelay: 250,
 });
