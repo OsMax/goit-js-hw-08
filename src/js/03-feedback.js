@@ -9,7 +9,6 @@ const STORAGE_KEY = 'feedback-form-state';
 let feedback = {};
 
 openPage();
-console.log(feedback);
 form.addEventListener('input', throttle(saveLocalStore, 500));
 form.addEventListener('submit', submitForm);
 
